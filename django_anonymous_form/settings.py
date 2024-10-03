@@ -126,7 +126,24 @@ MEDIA_URL = "/media/"
 MEDIA_DIR = os.path.join(BASE_DIR, 'media')
 MEDIA_ROOT = MEDIA_DIR
 
+CELERY_BROKER_URL = 'redis://161.11.20.121:6379//10'
+CELERY_RESULT_BACKEND = 'redis://161.11.20.121:6379/10'
+FORKED_BY_MULTIPROCESSING = 1
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+EMAIL_HOST = '161.11.16.20'
+EMAIL_PORT = 587
+# EMAIL_HOST_USER = 'print@el-spb.local'
+EMAIL_HOST_USER = 'no-reply@el-spb.local'
+# EMAIL_HOST_PASSWORD = 'Istok123'
+EMAIL_HOST_PASSWORD = '123ZXC@q'
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+# SERVER_EMAIL = 'print@el-spb.local'
+SERVER_EMAIL = 'no-reply@el-spb.local'
+# DEFAULT_FROM_EMAIL = 'print@el-spb.local'
+DEFAULT_FROM_EMAIL = 'no-reply@el-spb.local'
