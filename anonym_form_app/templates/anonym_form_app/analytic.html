@@ -1,0 +1,62 @@
+{% extends "anonym_form_app/base.html" %}
+
+{% block title %}
+    Просмотр обращений
+{% endblock %}
+
+{% block content %}
+    <div class="d-flex container">
+        <div class="d-flex flex-column" id="id_title_start">
+            <div class="d-flex text-36px-bold" style="margin-top: 80px">
+                Входящие заявки
+            </div>
+            {#            <div class="d-flex text-18px-light ье-3" style="line-height: 100%">Заявки абсолютно анонимные#}
+            {#            </div>#}
+        </div>
+    </div>
+    <div class="d-flex container back-search min-vh-100 w-100 mt-3">
+
+        <div class="d-flex flex-column justify-content-between col-2">
+            <div class="d-flex w-100">
+                <select class="form-select w-100"
+                        name="subdivision_id"
+                        id="subdivision_id"
+                        required>
+                    <option value="" selected>Ответственное подразделение</option>
+                    {% for obj in subdivisions %}
+                        <option value="{{ obj.id }}">{{ obj.subdivision_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="d-flex flex-column justify-content-between col-2 ms-2">
+            <div class="d-flex w-100">
+                <select class="form-select w-100"
+                        name="important_of_question"
+                        id="important_of_question"
+                        required>
+                    <option value="" selected>Срочность</option>
+                    <option value="1">Низкая</option>
+                    <option value="2">Средняя</option>
+                    <option value="3">Высокая</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="d-flex flex-column justify-content-between col-2 ms-2">
+            <div class="d-flex w-100">
+                <select class="form-select w-100"
+                        name="type_of_question"
+                        id="type_of_question"
+                        required>
+                    <option value="" selected>Тип обращения</option>
+                    <option value="1">Жалоба</option>
+                    <option value="2">Предложение</option>
+                </select>
+            </div>
+        </div>
+
+
+    </div>
+{% endblock %}

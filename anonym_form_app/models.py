@@ -180,7 +180,8 @@ class QuestionModel(models.Model):
     question = models.TextField(verbose_name="Текст обращения", max_length=5100)
     date_add = models.DateField(verbose_name='Дата подачи', auto_now_add=True, null=False)
     done_flag = models.BooleanField(verbose_name="Отработано", default=False)
-    done_date = models.DateField(verbose_name='Дата выполнения', null=True)
+    start_work_date = models.DateField(verbose_name='Дата начала выполнения', null=True, blank=True)
+    done_date = models.DateField(verbose_name='Дата завершения', null=True, blank=True)
     status = models.IntegerField(verbose_name="Статус обращения", choices=StatusChoice.choices,
                                  default=0)
 
@@ -189,4 +190,13 @@ class QuestionModel(models.Model):
         verbose_name_plural = _('обращения')
 
     def __str__(self):
-        return f'{self.question[:60]} - {self.done_flag}'
+        return f'{self.id}: {self.question[:60]} - {self.done_flag}'
+
+class QestionResultShowPermission(models.Model):
+    emp = models.ForeignKey(EmployeeModel, verbose_name='Сотрудник', on_delete=models.CASCADE)
+    class Meta:
+        verbose_name = _('сотрудник имеющий доступ')
+        verbose_name_plural = _('сотрудники имеющие доступ')
+
+    def __str__(self):
+        return f'{self.emp}'

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru" class="hide-scroll">
+<head>
+    {% load static %}
+    {#    {% load phonebook_tags %}#}
+    <meta charset="UTF-8">
+    <title>
+        {% block title %}
+            Title
+        {% endblock %}
+    </title>
+    <link rel="stylesheet" type="text/css" href="{% static 'anonym_form_app/Bootstrap-5-5.1.3/css/bootstrap.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'anonym_form_app/css/forms-style.css' %}"/>
+
+    <script type="text/javascript"
+            src="{% static 'anonym_form_app/Bootstrap-5-5.1.3/js/bootstrap.bundle.js' %}"></script>
+    {#    <script type="text/javascript" src="{% static 'kks_reestr_app/Bootstrap-5-5.1.3/js/bootstrap.min.js' %}"></script>#}
+    <script type="text/javascript" src="{% static 'anonym_form_app/jQuery-3.6.0/jquery-3.6.0.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'anonym_form_app/Bootstrap-5-5.1.3/js/bootstrap.min.js' %}"></script>
+
+
+</head>
+<body class="content-fade">
+
+<div class="header header-fixed d-flex">
+    <div class="header-inside d-flex container">
+        <div class="header_logo">
+            <a href="{% url 'index' %}"><img src="{% static 'anonym_form_app/icons/logo.png' %}" width="88px"
+                                             height="40px"></a>
+        </div>
+    </div>
+</div>
+{% block content %}
+{% endblock %}
+
+</body>

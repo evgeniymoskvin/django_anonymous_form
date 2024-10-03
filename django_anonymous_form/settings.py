@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'anonym_form_app'
+    'anonym_form_app',
+    'login'
 ]
 
 MIDDLEWARE = [
@@ -125,6 +126,11 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 MEDIA_URL = "/media/"
 MEDIA_DIR = os.path.join(BASE_DIR, 'media')
 MEDIA_ROOT = MEDIA_DIR
+
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'index'
+LOGOUT_REDIRECT_URL = 'login'
+
 
 CELERY_BROKER_URL = 'redis://161.11.20.121:6379//10'
 CELERY_RESULT_BACKEND = 'redis://161.11.20.121:6379/10'
