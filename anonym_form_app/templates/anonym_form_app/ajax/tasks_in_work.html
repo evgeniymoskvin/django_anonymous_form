@@ -1,0 +1,71 @@
+<div class="content-fade w-100">
+    <table id="tasks_table" class="table" style="margin-top: 15px">
+        <thead>
+        <tr style="cursor: context-menu">
+            <th class="th_tables" scope="col">#</th>
+            <th class="th_tables" scope="col">Текст</th>
+            <th class="th_tables" scope="col">Срочность</th>
+            <th class="th_tables" scope="col">Подразделение</th>
+            <th class="th_tables" scope="col" style="text-align: center;">Тип</th>
+
+            <th class="th_tables" scope="col" style="width: 50px; text-align: right; padding-right: 0">Статус</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for task in tasks %}
+            <tr class="tr-tables" style="cursor: context-menu" onclick="onClickDetailView({{ emp.id }})">
+                <th class="th_tables" scope="row" style="width: 30px">{{ forloop.counter }}</th>
+                <td class="td_tables" style="text-align: left">
+                    {{ task.question }}
+                </td>
+                <td class="td_tables" style="width: 30px; text-align: left">
+                    {{ task.get_important_of_question_display }}</td>
+                <td class="td_tables" style="width: 30px; text-align: left">
+                    {{ task.subdivision.subdivision_name }}
+                </td>
+                <td class="td_tables" style="width: 50px; text-align: center">
+                    {{ task.get_type_of_question_display }}</td>
+
+
+                <td class="td_tables" style="width: 50px; text-align: right; padding-right: 0">
+                    {{ task.get_status_display }}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var table = $('#tasks_table').DataTable({
+                {#order: [[1, 'asc']],#}
+                dom:
+                //"<'row'<'col-sm-12'tr>>",
+                //"<'row'<'col-sm-12 col-md-2'l><'col-sm-2 col-md-2 col-xxl-4'B><'col-sm-12 col-md-6'f>>" +
+                //    "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+                    "<'row'<'col-sm-12'tr>>" +
+                    //"<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+                    //    "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>" +
+                    "<'col-sm-2 col-md-2 col-xxl-2'B>",
+                "language": {
+                    "lengthMenu": "_MENU_",
+                    "zeroRecords": "Записи не найдены",
+                    "info": "Показано с _START_ по _END_ из _TOTAL_ записей",
+                    "search": "Поиск:",
+                    "paginate": {
+                        "next": "Следующая",
+                        "previous": "Предыдущая"
+                    }
+                },
+                "aLengthMenu": [[1, 5, 10, 15, 20, 25, -1], [1, 5, 10, 15, 20, 25, "Все"]],
+                "iDisplayLength": -1,
+                buttons: ['pdf', 'excel']
+            }
+        );
+        table.buttons().container()
+            .appendTo($('.col-sm-6:eq(0)', table.table().container()));
+
+    });
+</script>

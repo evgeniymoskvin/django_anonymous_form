@@ -41,8 +41,27 @@ class AnalyticView(View):
         if user_exist is False:
             content = {}
             return render(request, 'anonym_form_app/error_permission.html', content)
-        tasks = QuestionModel.objects.all().filter(done_flag=False)
+        tasks = QuestionModel.objects.all().filter(done_flag=False).order_by('-id')
         content = {
-            'tasks': tasks
+            'tasks': tasks,
+            'subdivisions': SubdivisionModel.objects.all()
         }
         return render(request, 'anonym_form_app/analytic.html', content)
+
+
+class GetTasksWithFilters(View):
+    def get(self, request):
+        subdivision_id = request.GET['subdivision_id']
+        important_of_question = request.GET['important_of_question']
+        type_of_question = request.GET['type_of_question']
+        tasks = QuestionModel.objects.all().filter(done_flag=False).filter().order_by('-id')
+        if subdivision_id:
+            tasks = tasks.filter(subdivision_id=subdivision_id)
+        if important_of_question:
+            tasks = tasks.filter(important_of_question=important_of_question)
+        if type_of_question:
+            tasks = tasks.filter(type_of_question=type_of_question)
+        content = {
+            'tasks': tasks,
+        }
+        return render(request, 'anonym_form_app/ajax/tasks_in_work.html', content)

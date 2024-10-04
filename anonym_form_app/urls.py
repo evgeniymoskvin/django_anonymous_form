@@ -21,4 +21,6 @@ from . import views
 urlpatterns = [
     path('', views.IndexView.as_view(), name='index'),
     path('analytics', views.AnalyticView.as_view(), name='analytics'),
+    path('ajax/filters', views.GetTasksWithFilters.as_view(), name='get-tasks-with-filters'),
+
 ]

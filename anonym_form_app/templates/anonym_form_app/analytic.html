@@ -14,49 +14,89 @@
             {#            </div>#}
         </div>
     </div>
-    <div class="d-flex container back-search min-vh-100 w-100 mt-3">
+    <div class="d-flex flex-column container">
+        <div class="d-flex  back-search w-100 mt-3">
 
-        <div class="d-flex flex-column justify-content-between col-2">
-            <div class="d-flex w-100">
-                <select class="form-select w-100"
-                        name="subdivision_id"
-                        id="subdivision_id"
-                        required>
-                    <option value="" selected>Ответственное подразделение</option>
-                    {% for obj in subdivisions %}
-                        <option value="{{ obj.id }}">{{ obj.subdivision_name }}</option>
-                    {% endfor %}
-                </select>
+            <div class="d-flex flex-column justify-content-between col-2">
+                <div class="d-flex w-100">
+                    <select class="form-select w-100"
+                            name="subdivision_id"
+                            id="subdivision_id"
+                            required>
+                        <option value="" selected>Ответственное подразделение</option>
+                        {% for obj in subdivisions %}
+                            <option value="{{ obj.id }}">{{ obj.subdivision_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="d-flex flex-column justify-content-between col-2 ms-2">
+                <div class="d-flex w-100">
+                    <select class="form-select w-100"
+                            name="important_of_question"
+                            id="important_of_question"
+                            required>
+                        <option value="" selected>Срочность</option>
+                        <option value="1">Низкая</option>
+                        <option value="2">Средняя</option>
+                        <option value="3">Высокая</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="d-flex flex-column justify-content-between col-2 ms-2">
+                <div class="d-flex w-100">
+                    <select class="form-select w-100"
+                            name="type_of_question"
+                            id="type_of_question"
+                            required>
+                        <option value="" selected>Тип обращения</option>
+                        <option value="1">Жалоба</option>
+                        <option value="2">Предложение</option>
+                    </select>
+                </div>
             </div>
         </div>
-
-        <div class="d-flex flex-column justify-content-between col-2 ms-2">
-            <div class="d-flex w-100">
-                <select class="form-select w-100"
-                        name="important_of_question"
-                        id="important_of_question"
-                        required>
-                    <option value="" selected>Срочность</option>
-                    <option value="1">Низкая</option>
-                    <option value="2">Средняя</option>
-                    <option value="3">Высокая</option>
-                </select>
-            </div>
+        <div class="d-flex w-100" id="inside_table" data-ajax-url='{% url "get-tasks-with-filters" %}'>
+            {% include 'anonym_form_app/ajax/tasks_in_work.html' %}
         </div>
-
-        <div class="d-flex flex-column justify-content-between col-2 ms-2">
-            <div class="d-flex w-100">
-                <select class="form-select w-100"
-                        name="type_of_question"
-                        id="type_of_question"
-                        required>
-                    <option value="" selected>Тип обращения</option>
-                    <option value="1">Жалоба</option>
-                    <option value="2">Предложение</option>
-                </select>
-            </div>
-        </div>
-
-
     </div>
+
+
+    <script>
+        $("#subdivision_id").change(function () {
+            console.log($('#subdivision_id').val())
+            getDataWithFilter()
+        });
+        $("#important_of_question").change(function () {
+            console.log($('#important_of_question').val())
+            getDataWithFilter()
+        });
+
+        $("#type_of_question").change(function () {
+            console.log($('#type_of_question').val())
+            getDataWithFilter()
+        });
+
+        function getDataWithFilter() {
+            let url = $("#inside_table").attr("data-ajax-url");
+            let subdivision_id = $('#subdivision_id').val()
+            let important_of_question = $('#important_of_question').val()
+            let type_of_question = $('#type_of_question').val()
+
+            $.ajax({                       // формируем AJAX запрос
+                url: url,                    // подгружаем URL адрес для запроса
+                data: {
+                    'subdivision_id': subdivision_id,
+                    'important_of_question': important_of_question,
+                    'type_of_question': type_of_question,
+                },
+                success: function (data) {
+                    $("#inside_table").html(data)
+                }
+            })
+        }
+    </script>
+
 {% endblock %}
