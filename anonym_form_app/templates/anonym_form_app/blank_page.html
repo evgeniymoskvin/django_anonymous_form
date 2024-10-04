@@ -40,6 +40,12 @@
         </div>
     {% endif %}
 
+    {% if task.done_date %}
+        <div class="d-flex text-14px-light">
+            <span class="text-14px-bold">Выполнен:&nbsp</span> {{ task.done_date }}
+        </div>
+    {% endif %}
+
     <div class="d-flex text-14px-light ">
         <span class="text-14px-bold">Срочность:&nbsp</span> {{ task.get_important_of_question_display }}
     </div>
@@ -55,6 +61,11 @@
         <span class="text-14px-bold">Сообщение:&nbsp</span>{{ task.question }}
     </div>
 
+    {% if task.status == 0 %}
+        <div class="d-flex text-14px-light mt-3">
+            <span class="text-14px-bold">Причина отмены:&nbsp</span> {{ task.description_canceled }}
+        </div>
+    {% endif %}
 
     <div class="d-flex">
         <button onclick="window.print()" class="button_blue mt-3" style="width: 200px; height: 40px">Распечатать
