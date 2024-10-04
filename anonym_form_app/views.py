@@ -1,3 +1,5 @@
+import datetime
+
 from django.shortcuts import render
 from django.views import View
 from django.http import HttpResponse
@@ -54,6 +56,7 @@ class GetTasksWithFilters(View):
         subdivision_id = request.GET['subdivision_id']
         important_of_question = request.GET['important_of_question']
         type_of_question = request.GET['type_of_question']
+        status_id = request.GET['status_id']
         tasks = QuestionModel.objects.all().filter(done_flag=False).filter().order_by('-id')
         if subdivision_id:
             tasks = tasks.filter(subdivision_id=subdivision_id)
@@ -61,7 +64,41 @@ class GetTasksWithFilters(View):
             tasks = tasks.filter(important_of_question=important_of_question)
         if type_of_question:
             tasks = tasks.filter(type_of_question=type_of_question)
+        if status_id:
+            tasks = tasks.filter(status=status_id)
         content = {
             'tasks': tasks,
         }
         return render(request, 'anonym_form_app/ajax/tasks_in_work.html', content)
+
+
+class ModalDetailView(View):
+    def get(self, request):
+        task_id = request.GET['task_id']
+        print(task_id)
+        content = {
+            'task': QuestionModel.objects.get(id=task_id)
+        }
+        return render(request, 'anonym_form_app/ajax/detail_modal.html', content)
+
+    def post(self, request):
+        print(request.POST)
+        task_id = int(request.POST['obj_id_for_change_status'])
+        task_to_change_status = QuestionModel.objects.get(id=task_id)
+        task_to_change_status.status = request.POST['status_id']
+        task_to_change_status.description_canceled = request.POST['WhyCancel']
+        if int(request.POST['status_id']) == 2:
+            task_to_change_status.start_work_date = datetime.datetime.now()
+        elif int(request.POST['status_id']) == 0 or int(request.POST['status_id']) == 3:
+            task_to_change_status.done_flag = True
+            task_to_change_status.done_date = datetime.datetime.now()
+        task_to_change_status.save()
+        return HttpResponse(status=200)
+
+
+class BlankDetailView(View):
+    def get(self, request, pk):
+        content = {
+            'task': QuestionModel.objects.get(id=pk)
+        }
+        return render(request, 'anonym_form_app/blank_page.html', content)

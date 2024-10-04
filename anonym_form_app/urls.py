@@ -22,5 +22,7 @@ urlpatterns = [
     path('', views.IndexView.as_view(), name='index'),
     path('analytics', views.AnalyticView.as_view(), name='analytics'),
     path('ajax/filters', views.GetTasksWithFilters.as_view(), name='get-tasks-with-filters'),
+    path('ajax/details', views.ModalDetailView.as_view(), name='details-modal'),
+    path('blank/<int:pk>', views.BlankDetailView.as_view(), name='blank'),
 
 ]

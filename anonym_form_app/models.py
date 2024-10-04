@@ -167,9 +167,10 @@ class QuestionModel(models.Model):
 
     class StatusChoice(models.IntegerChoices):
         """Тип жалобы/предложения"""
-        INBOX = 0, _('Поступило')
-        IN_WORK = 1, _('В работе')
-        DONE = 2, _('Выполнено')
+        CANCEL = 0, _('Отклонено')
+        INBOX = 1, _('Поступило')
+        IN_WORK = 2, _('В работе')
+        DONE = 3, _('Выполнено')
 
     important_of_question = models.IntegerField(verbose_name="Важность обращения",
                                                 choices=ImportantStatusChoice.choices, default=2)
@@ -183,7 +184,9 @@ class QuestionModel(models.Model):
     start_work_date = models.DateField(verbose_name='Дата начала выполнения', null=True, blank=True)
     done_date = models.DateField(verbose_name='Дата завершения', null=True, blank=True)
     status = models.IntegerField(verbose_name="Статус обращения", choices=StatusChoice.choices,
-                                 default=0)
+                                 default=1)
+    description = models.TextField(verbose_name="Примечание", null=True, blank=True)
+    description_canceled = models.TextField(verbose_name="Причина отказа", null=True, blank=True)
 
     class Meta:
         verbose_name = _('обращение')

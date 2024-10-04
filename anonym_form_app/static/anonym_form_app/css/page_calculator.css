@@ -873,7 +873,7 @@ row__color {
 }
 
 
-.icon-edit-lists {
+.icon-print {
     box-sizing: content-box;
     border: 0;
     border-radius: .25rem;
@@ -895,7 +895,7 @@ row__color {
     transition-duration: .15s;
 }
 
-.icon-edit-lists:hover {
+.icon-print:hover {
     opacity: 1;
 }
 

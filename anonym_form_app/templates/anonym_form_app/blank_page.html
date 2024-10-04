@@ -1,0 +1,69 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>
+        Бланк задания
+    </title>
+    <link rel="stylesheet" type="text/css"
+          href="{% static 'anonym_form_app/DataTables/datatables.css' %}"/>
+    <link rel="stylesheet" type="text/css"
+          href="{% static 'anonym_form_app/Bootstrap-5-5.1.3/css/bootstrap.min.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'anonym_form_app/css/page_calculator.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'anonym_form_app/css/print.css' %}"/>
+
+    <script type="text/javascript" src="{% static 'anonym_form_app/jQuery-3.6.0/jquery-3.6.0.min.js' %}"></script>
+    <script type="text/javascript"
+            src="{% static 'anonym_form_app/Bootstrap-5-5.1.3/js/bootstrap.bundle.js' %}"></script>
+    <script type="text/javascript"
+            src="{% static 'anonym_form_app/DataTables/datatables.js' %}"></script>
+</head>
+<body class="content-fade">
+
+<div class="d-flex container flex-column mt-3">
+    <div class="d-flex text-16px-bold ">
+        Заявка
+    </div>
+
+    <div class="d-flex text-14px-light mt-3">
+        <span class="text-14px-bold">ID:&nbsp</span> {{ task.id }}
+    </div>
+    <div class="d-flex text-14px-light mt-3">
+        <span class="text-14px-bold">Дата поступления:&nbsp</span> {{ task.date_add }}
+    </div>
+    {% if task.start_work_date %}
+        <div class="d-flex text-14px-light">
+            <span class="text-14px-bold">Взят в работу:&nbsp</span> {{ task.start_work_date }}
+        </div>
+    {% endif %}
+
+    <div class="d-flex text-14px-light ">
+        <span class="text-14px-bold">Срочность:&nbsp</span> {{ task.get_important_of_question_display }}
+    </div>
+
+    <div class="d-flex text-14px-light ">
+        <span class="text-14px-bold">Тип:&nbsp</span>{{ task.get_type_of_question_display }}
+    </div>
+
+    <div class="d-flex text-14px-light ">
+        <span class="text-14px-bold">Подразделение:&nbsp</span>{{ task.subdivision.subdivision_name }}
+    </div>
+    <div class="d-flex text-14px-light mt-3">
+        <span class="text-14px-bold">Сообщение:&nbsp</span>{{ task.question }}
+    </div>
+
+
+    <div class="d-flex">
+        <button onclick="window.print()" class="button_blue mt-3" style="width: 200px; height: 40px">Распечатать
+        </button>
+    </div>
+</div>
+</body>
+
+<script>
+</script>
+
+</html>

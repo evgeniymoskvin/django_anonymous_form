@@ -14,10 +14,10 @@
 
         <tbody>
         {% for task in tasks %}
-            <tr class="tr-tables" style="cursor: context-menu" onclick="onClickDetailView({{ emp.id }})">
+            <tr class="tr-tables" style="cursor: context-menu" onclick="onClickDetailView({{ task.id }})">
                 <th class="th_tables" scope="row" style="width: 30px">{{ forloop.counter }}</th>
                 <td class="td_tables" style="text-align: left">
-                    {{ task.question }}
+                    {{ task.question|truncatechars:100 }}
                 </td>
                 <td class="td_tables" style="width: 30px; text-align: left">
                     {{ task.get_important_of_question_display }}</td>
