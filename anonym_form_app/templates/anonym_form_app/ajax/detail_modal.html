@@ -47,6 +47,12 @@
                     <div class="d-flex text-20px-regular ">Сообщение:&nbsp</div>
                     <div class="d-flex text-20px-light padding-left-30 text-align-end">{{ task.question }}</div>
                 </div>
+            {% if task.description_canceled %}
+                <div class="d-flex w-100 flex-row justify-content-start align-items-center">
+                    <div class="d-flex text-20px-regular ">Причина отмены:&nbsp</div>
+                    <div class="d-flex text-20px-light padding-left-30 text-align-end">{{ task.description_canceled }}</div>
+                </div>
+            {% endif %}
 
                 <div class="d-flex w-50 flex-row justify-content-between align-items-center mt-2">
                     <div class="d-flex text-20px-regular">Статус:</div>

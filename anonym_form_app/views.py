@@ -51,6 +51,21 @@ class AnalyticView(View):
         return render(request, 'anonym_form_app/analytic.html', content)
 
 
+class AnalyticAllView(View):
+    @method_decorator(login_required(login_url='login'))
+    def get(self, request):
+        user_exist = QestionResultShowPermission.objects.filter(emp__user=request.user).exists()
+        if user_exist is False:
+            content = {}
+            return render(request, 'anonym_form_app/error_permission.html', content)
+        tasks = QuestionModel.objects.all().order_by('-id')
+        content = {
+            'tasks': tasks,
+            'subdivisions': SubdivisionModel.objects.all()
+        }
+        return render(request, 'anonym_form_app/analytic_all.html', content)
+
+
 class GetTasksWithFilters(View):
     def get(self, request):
         subdivision_id = request.GET['subdivision_id']
@@ -70,6 +85,27 @@ class GetTasksWithFilters(View):
             'tasks': tasks,
         }
         return render(request, 'anonym_form_app/ajax/tasks_in_work.html', content)
+
+
+class GetAllTasksWithFilters(View):
+    def get(self, request):
+        subdivision_id = request.GET['subdivision_id']
+        important_of_question = request.GET['important_of_question']
+        type_of_question = request.GET['type_of_question']
+        status_id = request.GET['status_id']
+        tasks = QuestionModel.objects.all().order_by('-id')
+        if subdivision_id:
+            tasks = tasks.filter(subdivision_id=subdivision_id)
+        if important_of_question:
+            tasks = tasks.filter(important_of_question=important_of_question)
+        if type_of_question:
+            tasks = tasks.filter(type_of_question=type_of_question)
+        if status_id:
+            tasks = tasks.filter(status=status_id)
+        content = {
+            'tasks': tasks,
+        }
+        return render(request, 'anonym_form_app/ajax/tasks_all.html', content)
 
 
 class ModalDetailView(View):
