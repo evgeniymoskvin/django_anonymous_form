@@ -25,7 +25,10 @@ class IndexView(View):
     def post(self, request):
         print(f'request.POST: {request.POST}')
         new_question = QuestionModel()
-        new_question.subdivision_id = int(request.POST['subdivision_id'])
+        try:
+            new_question.subdivision_id = int(request.POST['subdivision_id'])
+        except Exception as e:
+            print(e)
         new_question.important_of_question = int(request.POST['important_of_question'])
         new_question.type_of_question = int(request.POST['type_of_question'])
         new_question.question = request.POST['question_text']
@@ -68,12 +71,17 @@ class AnalyticAllView(View):
 
 class GetTasksWithFilters(View):
     def get(self, request):
-        subdivision_id = request.GET['subdivision_id']
+        try:
+            subdivision_id = int(request.GET['subdivision_id'])
+        except:
+            subdivision_id = None
         important_of_question = request.GET['important_of_question']
         type_of_question = request.GET['type_of_question']
         status_id = request.GET['status_id']
         tasks = QuestionModel.objects.all().filter(done_flag=False).filter().order_by('-id')
-        if subdivision_id:
+        if subdivision_id == 0:
+            tasks = tasks.filter(subdivision_id=None)
+        elif subdivision_id:
             tasks = tasks.filter(subdivision_id=subdivision_id)
         if important_of_question:
             tasks = tasks.filter(important_of_question=important_of_question)
@@ -89,12 +97,17 @@ class GetTasksWithFilters(View):
 
 class GetAllTasksWithFilters(View):
     def get(self, request):
-        subdivision_id = request.GET['subdivision_id']
+        try:
+            subdivision_id = int(request.GET['subdivision_id'])
+        except:
+            subdivision_id = None
         important_of_question = request.GET['important_of_question']
         type_of_question = request.GET['type_of_question']
         status_id = request.GET['status_id']
         tasks = QuestionModel.objects.all().order_by('-id')
-        if subdivision_id:
+        if subdivision_id == 0:
+            tasks = tasks.filter(subdivision_id=None)
+        elif subdivision_id:
             tasks = tasks.filter(subdivision_id=subdivision_id)
         if important_of_question:
             tasks = tasks.filter(important_of_question=important_of_question)
@@ -123,12 +136,36 @@ class ModalDetailView(View):
         task_to_change_status = QuestionModel.objects.get(id=task_id)
         task_to_change_status.status = request.POST['status_id']
         task_to_change_status.description_canceled = request.POST['WhyCancel']
-        if int(request.POST['status_id']) == 2:
+        if int(request.POST['status_id']) == 2 or int(request.POST['status_id']) == 1:
+            task_to_change_status.done_flag = False
             task_to_change_status.start_work_date = datetime.datetime.now()
         elif int(request.POST['status_id']) == 0 or int(request.POST['status_id']) == 3:
             task_to_change_status.done_flag = True
             task_to_change_status.done_date = datetime.datetime.now()
         task_to_change_status.save()
+        return HttpResponse(status=200)
+
+
+class ChangeSubdivisionModalDetailView(View):
+    def get(self, request):
+        task_id = request.GET['task_id']
+        print(task_id)
+        content = {
+            'task': QuestionModel.objects.get(id=task_id),
+            'subdivisions': SubdivisionModel.objects.all()
+        }
+        return render(request, 'anonym_form_app/ajax/change_subdivision_modal.html', content)
+
+    def post(self, request):
+        print(request.POST)
+        task_id = int(request.POST['obj_id_for_change_division'])
+        division_id = int(request.POST['division_id'])
+        task = QuestionModel.objects.get(id=task_id)
+        if division_id == 0:
+            task.subdivision_id = None
+        else:
+            task.subdivision_id = division_id
+        task.save()
         return HttpResponse(status=200)
 
 

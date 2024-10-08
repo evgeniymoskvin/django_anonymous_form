@@ -4,7 +4,8 @@
             <h5 class="modal-title text-24px-regular"
                 style="cursor: context-menu">Детали обращения</h5>
             <div>
-
+                <button id="change_task" class="icon-edit me-2" data-bs-dismiss="modal"
+                        aria-label="Close" data-ajax-id='{{ task.id }}' onclick="onClickChangeSubdivision()"></button>
                 <button id="change_lists" class="icon-print"
                         data-ajax-id='{{ task.id }}'
                         onclick='window.open("{% url "blank" task.id %}","Popup", "location,status,scrollbars,resizable,width=800")'></button>
@@ -39,20 +40,26 @@
                     <div class="d-flex text-20px-regular ">Тип:&nbsp</div>
                     <div class="d-flex text-20px-light padding-left-30 text-align-end">{{ task.get_type_of_question_display }}</div>
                 </div>
+
                 <div class="d-flex w-100 flex-row justify-content-start align-items-center">
                     <div class="d-flex text-20px-regular ">Подразделение:&nbsp</div>
-                    <div class="d-flex text-20px-light padding-left-30 text-align-end">{{ task.subdivision.subdivision_name }}</div>
+                    {% if task.subdivision %}
+                        <div class="d-flex text-20px-light padding-left-30 text-align-end">{{ task.subdivision.subdivision_name }}</div>
+                    {% else %}
+                        <div class="d-flex text-20px-light padding-left-30 text-align-end">Не определено</div>
+                    {% endif %}
                 </div>
+
                 <div class="d-flex w-100 flex-row justify-content-start align-items-center">
                     <div class="d-flex text-20px-regular ">Сообщение:&nbsp</div>
                     <div class="d-flex text-20px-light padding-left-30 text-align-end">{{ task.question }}</div>
                 </div>
-            {% if task.description_canceled %}
-                <div class="d-flex w-100 flex-row justify-content-start align-items-center">
-                    <div class="d-flex text-20px-regular ">Причина отмены:&nbsp</div>
-                    <div class="d-flex text-20px-light padding-left-30 text-align-end">{{ task.description_canceled }}</div>
-                </div>
-            {% endif %}
+                {% if task.description_canceled %}
+                    <div class="d-flex w-100 flex-row justify-content-start align-items-center">
+                        <div class="d-flex text-20px-regular ">Причина отмены:&nbsp</div>
+                        <div class="d-flex text-20px-light padding-left-30 text-align-end">{{ task.description_canceled }}</div>
+                    </div>
+                {% endif %}
 
                 <div class="d-flex w-50 flex-row justify-content-between align-items-center mt-2">
                     <div class="d-flex text-20px-regular">Статус:</div>
@@ -138,4 +145,29 @@
             }
         })
     })
+
+    function onClickChangeSubdivision() {
+        var form_url = $("#changeSubdivisionModalWindow").attr("data-ajax-url")
+        var task_id = $("#change_task").attr("data-ajax-id")
+        console.log(form_url)
+        console.log(task_id)
+        $.ajax({
+            type: "GET",
+            url: form_url,
+            data: {
+                'task_id': task_id
+            },
+            success: function (data) {
+                $('#detailModalWindow').modal('hide');
+                $("#changeSubdivisionModalWindow").html(data)
+                $('#changeSubdivisionModalWindow').modal('show');
+            },
+            error: function () {
+                $('#changeSubdivisionModalWindow').modal('hide');
+                $('#error_modal').modal('show');
+
+            }
+        })
+    }
+
 </script>

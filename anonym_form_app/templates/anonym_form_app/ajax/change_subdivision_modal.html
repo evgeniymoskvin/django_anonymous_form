@@ -1,0 +1,74 @@
+<div class="modal-dialog modal-lg modal-dialog-centered modal-dialog_change-status">
+    <div class="modal-content modal-content_clearance">
+        <div class="modal-header modal-header_clearance">
+            <h5 class="modal-title text-24px-regular"
+                style="cursor: context-menu">Изменить ответственное подразделение</h5>
+            <div>
+
+                <button class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+        </div>
+
+        <form id="form_send_division" method="POST" action="{% url 'change-subdivision-details-modal' %}"
+              data-ajax-url="{% url 'change-subdivision-details-modal' %}">
+            {% csrf_token %}
+            <div class="modal-body modal-body_clearance">
+                <div class="d-flex w-50 flex-row justify-content-between align-items-center mt-2">
+                    <div class="d-none" id="hidden-div-obj-info" data-ajax-change="{{ task.id }}"></div>
+                    <input class="d-none" name='obj_id_for_change_division' id="obj_id_for_change_division">
+                    <div class="d-flex">
+                        <select class="form-select" style="min-width: 300px"
+                                name="division_id"
+                                id="status_id_select">
+                            {% if task.subdivision_id == 0 %}
+                                <option value="0" selected>Не определено</option>
+                            {% else %}
+                                <option value="0">Не определено</option>
+                            {% endif %}
+                            {% for obj in subdivisions %}
+                                {% if task.subdivision_id == obj.id %}
+                                    <option value="{{ obj.id }}" selected>{{ obj.subdivision_name }}</option>
+                                {% else %}
+                                    <option value="{{ obj.id }}">{{ obj.subdivision_name }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="modal-footer modal-footer_clearance justify-content-between">
+                <button class="button_blue_clearance button_blue_clearance_send_file" type="submit">
+                    Сохранить
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $('#form_send_division').submit(function (e) {
+        e.preventDefault()
+        document.getElementById('obj_id_for_change_division').value = $("#hidden-div-obj-info").attr("data-ajax-change")
+        console.log(document.getElementById('obj_id_for_change_division').value)
+        var form = $(this)
+        var form_url = $("#changeSubdivisionModalWindow").attr("data-ajax-url")
+        console.log(form_url)
+
+        $.ajax({
+            type: "POST",
+            url: form_url,
+            data: form.serialize(),
+            success: function (data) {
+                $('#changeSubdivisionModalWindow').modal('hide');
+                getDataWithFilter()
+            },
+            error: function () {
+                $('#changeSubdivisionModalWindow').modal('hide');
+                $('#error_modal').modal('show');
+
+            }
+        })
+    })
+</script>
