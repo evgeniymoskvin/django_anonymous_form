@@ -77,7 +77,9 @@
         <div class="d-flex w-100" id="inside_table" data-ajax-url='{% url "get-tasks-with-filters" %}'>
             {% include 'anonym_form_app/ajax/tasks_in_work.html' %}
         </div>
-        <a href="{% url 'report-new' %}">Экспорт в xlsx</a>
+        <div class="text-14px-regular">
+            <a href="{% url 'report-new' %}">Экспорт в xlsx</a>
+        </div>
     </div>
 
     <div class="modal fade" id="detailModalWindow" data-ajax-url="{% url 'details-modal' %}" tabindex="-1">
