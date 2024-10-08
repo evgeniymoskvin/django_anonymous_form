@@ -14,6 +14,7 @@ from django.utils.encoding import escape_uri_path
 from django.contrib.auth.decorators import login_required
 
 from .models import SubdivisionModel, QuestionModel, QestionResultShowPermission
+from .tasks import celery_send_email_to_subdivision_responsible
 
 logging.basicConfig(level=logging.INFO, filename="py_log.log", filemode="w")
 
@@ -44,6 +45,7 @@ class IndexView(View):
         new_question.type_of_question = int(request.POST['type_of_question'])
         new_question.question = request.POST['question_text']
         new_question.save()
+        celery_send_email_to_subdivision_responsible.delay(new_question.id)
         logging.info(f'Новое обращение: {new_question}')
         content = {
             'new_question': new_question
