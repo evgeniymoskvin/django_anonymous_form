@@ -12,7 +12,7 @@ from anonym_form_app.models import SubdivisionModel, QuestionModel
 def celery_send_email_to_subdivision_responsible(task_id):
     task = QuestionModel.objects.get(id=task_id)
     try:
-        email_subdivision_responsible = EmailMessage(f'Новое обращение №{task.id}',
+        email_subdivision_responsible = EmailMessage(f'Новое обращение в {task.subdivision.subdivision_name} №{task.id}',
                                                      f'Текст обращения: \n {task.question} \n Срочность: {task.get_important_of_question_display()} \n Тип: {task.get_type_of_question_display()}',
                                                      to=[task.subdivision.subdivision_responsible.user.email])
         email_subdivision_responsible.send()
