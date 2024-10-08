@@ -27,7 +27,7 @@
                             id="subdivision_id"
                             required>
                         <option value="" selected>Ответственное подразделение</option>
-                            <option value="0">Не определено</option>
+                        <option value="0">Не определено</option>
                         {% for obj in subdivisions %}
                             <option value="{{ obj.id }}">{{ obj.subdivision_name }}</option>
                         {% endfor %}
@@ -77,13 +77,16 @@
         <div class="d-flex w-100" id="inside_table" data-ajax-url='{% url "get-tasks-with-filters" %}'>
             {% include 'anonym_form_app/ajax/tasks_in_work.html' %}
         </div>
+        <a href="{% url 'report-new' %}">Экспорт в xlsx</a>
     </div>
 
     <div class="modal fade" id="detailModalWindow" data-ajax-url="{% url 'details-modal' %}" tabindex="-1">
     </div>
 
-    <div class="modal fade" id="changeSubdivisionModalWindow" data-ajax-url="{% url 'change-subdivision-details-modal' %}" tabindex="-1">
+    <div class="modal fade" id="changeSubdivisionModalWindow"
+         data-ajax-url="{% url 'change-subdivision-details-modal' %}" tabindex="-1">
     </div>
+
 
     <script>
         $("#subdivision_id").change(function () {
@@ -141,7 +144,6 @@
                 }
             })
         }
-
 
 
     </script>

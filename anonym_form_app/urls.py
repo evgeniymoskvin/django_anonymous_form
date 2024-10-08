@@ -27,5 +27,7 @@ urlpatterns = [
     path('ajax/details', views.ModalDetailView.as_view(), name='details-modal'),
     path('ajax/change-subdivision', views.ChangeSubdivisionModalDetailView.as_view(), name='change-subdivision-details-modal'),
     path('blank/<int:pk>', views.BlankDetailView.as_view(), name='blank'),
+    path('report/new', views.GetXLSReportNewTasks.as_view(), name='report-new'),
+    path('report/all', views.GetXLSReportAllTasks.as_view(), name='report-all'),
 
 ]
