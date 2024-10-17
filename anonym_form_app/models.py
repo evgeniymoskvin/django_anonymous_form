@@ -187,6 +187,7 @@ class QuestionModel(models.Model):
                                  default=1)
     description = models.TextField(verbose_name="Примечание", null=True, blank=True)
     description_canceled = models.TextField(verbose_name="Причина отказа", null=True, blank=True)
+    description_to_work = models.TextField(verbose_name="Принятое решение", null=True, blank=True)
 
     class Meta:
         verbose_name = _('обращение')

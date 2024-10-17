@@ -60,6 +60,11 @@
     <div class="d-flex text-14px-light mt-3">
         <span class="text-14px-bold">Сообщение:&nbsp</span>{{ task.question }}
     </div>
+    {% if task.description_to_work %}
+        <div class="d-flex text-14px-light mt-3">
+            <span class="text-14px-bold">Принятое решение:&nbsp</span>{{ task.description_to_work }}
+        </div>
+    {% endif %}
 
     {% if task.status == 0 %}
         <div class="d-flex text-14px-light mt-3">

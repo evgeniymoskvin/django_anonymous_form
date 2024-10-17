@@ -1,4 +1,10 @@
-<div class="modal-dialog modal-lg modal-dialog-centered modal-dialog_change-status">
+<div class="modal-dialog
+{% if len_flag %}
+modal-xl
+{% else %}
+modal-lg
+{% endif %}
+modal-dialog-centered modal-dialog_change-status">
     <div class="modal-content modal-content_clearance">
         <div class="modal-header modal-header_clearance">
             <h5 class="modal-title text-24px-regular"
@@ -56,14 +62,26 @@
                 <div class="d-flex w-100 flex-row justify-content-start align-items-center">
                     <div class="d-flex text-20px-light padding-left-30 text-align-end">{{ task.question }}</div>
                 </div>
+
+                {% if task.description_to_work %}
+                    <div class="d-none w-100 flex-row justify-content-start align-items-center">
+                        <div class="d-flex text-20px-regular ">Принятое решение:&nbsp</div>
+                    </div>
+                    <div class="d-none w-100 flex-row justify-content-start align-items-center">
+                        <div class="d-flex text-20px-light padding-left-30 text-align-end"
+                             id="DescriptionFromIDB">{{ task.description_to_work }}</div>
+                    </div>
+                {% endif %}
                 {% if task.description_canceled %}
-                    <div class="d-flex w-100 flex-row justify-content-start align-items-center">
+                    <div class="d-none w-100 flex-row justify-content-start align-items-center">
                         <div class="d-flex text-20px-regular ">Причина отмены:&nbsp</div>
-                        <div class="d-flex text-20px-light padding-left-30 text-align-end">{{ task.description_canceled }}</div>
+                        <div class="d-flex text-20px-light padding-left-30 text-align-end"
+                             id="WhyCancelFromDB">{{ task.description_canceled }}</div>
                     </div>
                 {% endif %}
 
-                <div class="d-flex w-50 flex-row justify-content-between align-items-center mt-2">
+
+                <div class="d-flex w-50 flex-row justify-content-start align-items-center mt-2">
                     <div class="d-flex text-20px-regular">Статус:</div>
                     <div class="d-none" id="hidden-div-obj-info" data-ajax-change="{{ task.id }}"></div>
                     <input class="d-none" name='obj_id_for_change_status' id="obj_id_for_change_status">
@@ -94,11 +112,48 @@
                         </select>
                     </div>
                 </div>
-                <div class="d-none w-50 flex-row justify-content-between align-items-center mt-2" id="WhyCancel">
-                    {#                        <div class="d-flex text-20px-light">Причина</div>#}
-                    <input type="text" class="d-flex w-100 input_text" name="WhyCancel"
-                           placeholder="Причина отмены" style="padding-left: 15px; border-radius: 4px">
-                </div>
+                {% if task.description_to_work %}
+                    <div class="d-flex w-100 flex-column justify-content-between align-items-center mt-2"
+                         id="InWorkComment">
+                        <div class="d-flex w-100 flex-row justify-content-start align-items-center">
+                            <div class="d-flex text-20px-regular ">Принятое решение:&nbsp</div>
+                        </div>
+                        <textarea class="d-flex input_text_clearance w-100 mt-2" id="InWorkCommentText"
+                                  name="InWorkComment"
+                                  placeholder="Решение по задаче" style="min-height: 100px;"></textarea>
+                    </div>
+                {% else %}
+
+                    <div class="d-none w-100 flex-column justify-content-between align-items-center mt-2"
+                         id="InWorkComment">
+                        <div class="d-flex w-100 flex-row justify-content-start align-items-center">
+                            <div class="d-flex text-20px-regular ">Принятое решение:&nbsp</div>
+                        </div>
+                        <textarea class="d-flex input_text_clearance w-100 mt-2" id="InWorkCommentText"
+                                  name="InWorkComment"
+                                  placeholder="Решение по задаче" style="min-height: 100px;"></textarea>
+                    </div>
+                {% endif %}
+
+                {% if task.description_canceled %}
+                    <div class="d-flex w-100 flex-column justify-content-between align-items-center mt-2"
+                         id="WhyCancel">
+                        <div class="d-flex w-100 flex-row justify-content-start align-items-center">
+                            <div class="d-flex text-20px-regular ">Причина отмены:&nbsp</div>
+                        </div>
+                        <textarea class="d-flex input_text_clearance w-100 mt-2" name="WhyCancel" id="WhyCancelText"
+                                  placeholder="Причина отмены" style="min-height: 100px;"></textarea>
+                    </div>
+                {% else %}
+                    <div class="d-none w-100 flex-column justify-content-between align-items-center mt-2"
+                         id="WhyCancel">
+                        <div class="d-flex w-100 flex-row justify-content-start align-items-center">
+                            <div class="d-flex text-20px-regular ">Причина отмены:&nbsp</div>
+                        </div>
+                        <textarea class="d-flex input_text_clearance w-100 mt-2" name="WhyCancel" id="WhyCancelText"
+                                  placeholder="Причина отмены" style="min-height: 100px;"></textarea>
+                    </div>
+                {% endif %}
 
             </div>
 
@@ -112,15 +167,51 @@
 </div>
 
 <script>
+    $(function () {
+        console.log('открыто окно')
+        let description = $('#DescriptionFromIDB').text()
+        let whyCancel = $('#WhyCancelFromDB').text()
+        $('#InWorkCommentText').val(description)
+        $('#WhyCancelText').val(whyCancel)
+        var selectedIndex = $('#status_id_select').prop('selectedIndex');
+        if (selectedIndex == 0) {
+            $('#WhyCancel').removeClass('d-none')
+            $('#WhyCancel').addClass('d-flex')
+        } else if (selectedIndex == 2) {
+            $('#InWorkComment').removeClass('d-none')
+            $('#InWorkComment').addClass('d-flex')
+        }
+    });
+
     $('#status_id_select').change(function () {
             var selectedIndex = $('#status_id_select').prop('selectedIndex');
-            console.log('selectedIndex', selectedIndex)
+            let description = $('#InWorkCommentText').val().length
+            let whyCancel = $('#WhyCancelText').val().length
+        console.log(description)
+        console.log(whyCancel)
             if (selectedIndex == 0) {
                 $('#WhyCancel').removeClass('d-none')
                 $('#WhyCancel').addClass('d-flex')
+                if (description == 0) {
+                    $('#InWorkComment').removeClass('d-flex')
+                    $('#InWorkComment').addClass('d-none')
+                }
+            } else if (selectedIndex == 2) {
+                $('#InWorkComment').removeClass('d-none')
+                $('#InWorkComment').addClass('d-flex')
+                if (whyCancel == 0) {
+                    $('#WhyCancel').removeClass('d-flex')
+                    $('#WhyCancel').addClass('d-none')
+                }
             } else {
-                $('#WhyCancel').removeClass('d-flex')
-                $('#WhyCancel').addClass('d-none')
+                if (whyCancel == 0) {
+                    $('#WhyCancel').removeClass('d-flex')
+                    $('#WhyCancel').addClass('d-none')
+                }
+                if (description == 0) {
+                    $('#InWorkComment').removeClass('d-flex')
+                    $('#InWorkComment').addClass('d-none')
+                }
             }
         }
     )

@@ -138,16 +138,36 @@ class GetAllTasksWithFilters(View):
 class ModalDetailView(View):
     def get(self, request):
         task_id = request.GET['task_id']
+        task = QuestionModel.objects.get(id=task_id)
+        len_text = len(task.question)
+        try:
+            len_description = len(task.description_to_work)
+        except Exception as e:
+            len_description = 0
+        try:
+            len_description_cancel = len(task.description_canceled)
+        except Exception as e:
+            len_description_cancel = 0
+        if len_text > 150 or len_description > 150 or len_description_cancel > 150:
+            len_flag = True
+        else:
+            len_flag = False
         content = {
-            'task': QuestionModel.objects.get(id=task_id)
+            'task': QuestionModel.objects.get(id=task_id),
+            'len_flag': len_flag
+
         }
         return render(request, 'anonym_form_app/ajax/detail_modal.html', content)
 
     def post(self, request):
+        print(request.POST)
         task_id = int(request.POST['obj_id_for_change_status'])
         task_to_change_status = QuestionModel.objects.get(id=task_id)
         task_to_change_status.status = request.POST['status_id']
-        task_to_change_status.description_canceled = request.POST['WhyCancel']
+        if len(request.POST['WhyCancel']):
+            task_to_change_status.description_canceled = request.POST['WhyCancel']
+        if len(request.POST['InWorkComment']):
+            task_to_change_status.description_to_work = request.POST['InWorkComment']
         if int(request.POST['status_id']) == 2 or int(request.POST['status_id']) == 1:
             task_to_change_status.done_flag = False
             task_to_change_status.start_work_date = datetime.datetime.now()
@@ -203,14 +223,24 @@ class GetXLSReportNewTasks(View):
                 task.get_status_display(),
                 task.get_type_of_question_display(),
                 task.get_important_of_question_display(),
-                task.date_add
+                task.date_add,
+                task.description_to_work,
+                task.start_work_date
             ]
             page.append(row)
-            page[f'B{count + 2}'].alignment = Alignment(
+            alignment = Alignment(
                 horizontal='general',
                 vertical='center',
                 wrap_text=True,
                 shrink_to_fit=True)
+            alignment_center_vertical = Alignment(vertical='center', )
+            page[f'A{count + 2}'].alignment = alignment
+            page[f'B{count + 2}'].alignment = alignment
+            page[f'C{count + 2}'].alignment = alignment_center_vertical
+            page[f'D{count + 2}'].alignment = alignment_center_vertical
+            page[f'E{count + 2}'].alignment = alignment_center_vertical
+            page[f'F{count + 2}'].alignment = alignment_center_vertical
+            page[f'G{count + 2}'].alignment = alignment
             count += 1
         try:
             wb.save(file_path_to_export)
@@ -231,6 +261,7 @@ class GetXLSReportNewTasks(View):
         else:
             return Http404
 
+
 class GetXLSReportAllTasks(View):
     def get(self, request):
         file_xlsx_path = os.path.join(settings.BASE_DIR, 'anonym_form_app', 'xlsx', 'report-all-tasks.xlsx')
@@ -248,6 +279,7 @@ class GetXLSReportAllTasks(View):
                 task.get_type_of_question_display(),
                 task.get_important_of_question_display(),
                 task.date_add,
+                task.description_to_work,
                 task.start_work_date,
                 task.done_date,
                 task.description_canceled
@@ -258,9 +290,17 @@ class GetXLSReportAllTasks(View):
                 vertical='center',
                 wrap_text=True,
                 shrink_to_fit=True)
-            page[f'B{count + 2}'].alignment = alignment
+            alignment_center_vertical = Alignment(vertical='center', )
             page[f'A{count + 2}'].alignment = alignment
-            page[f'I{count + 2}'].alignment = alignment
+            page[f'B{count + 2}'].alignment = alignment
+            page[f'C{count + 2}'].alignment = alignment_center_vertical
+            page[f'D{count + 2}'].alignment = alignment_center_vertical
+            page[f'E{count + 2}'].alignment = alignment_center_vertical
+            page[f'F{count + 2}'].alignment = alignment_center_vertical
+            page[f'G{count + 2}'].alignment = alignment
+            page[f'H{count + 2}'].alignment = alignment_center_vertical
+            page[f'I{count + 2}'].alignment = alignment_center_vertical
+            page[f'J{count + 2}'].alignment = alignment
             count += 1
         try:
             wb.save(file_path_to_export)
