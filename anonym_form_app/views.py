@@ -237,7 +237,7 @@ class GetXLSReportNewTasks(View):
             page[f'A{count + 2}'].alignment = alignment
             page[f'B{count + 2}'].alignment = alignment
             page[f'C{count + 2}'].alignment = alignment_center_vertical
-            page[f'D{count + 2}'].alignment = alignment_center_vertical
+            page[f'D{count + 2}'].alignment = alignment
             page[f'E{count + 2}'].alignment = alignment_center_vertical
             page[f'F{count + 2}'].alignment = alignment_center_vertical
             page[f'G{count + 2}'].alignment = alignment
@@ -294,7 +294,7 @@ class GetXLSReportAllTasks(View):
             page[f'A{count + 2}'].alignment = alignment
             page[f'B{count + 2}'].alignment = alignment
             page[f'C{count + 2}'].alignment = alignment_center_vertical
-            page[f'D{count + 2}'].alignment = alignment_center_vertical
+            page[f'D{count + 2}'].alignment = alignment
             page[f'E{count + 2}'].alignment = alignment_center_vertical
             page[f'F{count + 2}'].alignment = alignment_center_vertical
             page[f'G{count + 2}'].alignment = alignment

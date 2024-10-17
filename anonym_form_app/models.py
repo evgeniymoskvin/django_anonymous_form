@@ -162,8 +162,8 @@ class QuestionModel(models.Model):
 
     class TypeOfQuestionChoice(models.IntegerChoices):
         """Тип жалобы/предложения"""
-        COMPLAINT = 1, _('Жалоба')
-        OFFER = 2, _('Предложение')
+        COMPLAINT = 1, _('Результат наблюдения за безопасностью и качеством')
+        OFFER = 2, _('Предложение по развитию и совершенствованию')
 
     class StatusChoice(models.IntegerChoices):
         """Тип жалобы/предложения"""
